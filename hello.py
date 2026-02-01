@@ -1,4 +1,12 @@
-# Простая программа на Python
-name = input("Как тебя зовут? ")
-print("Привет, " + name + "!")
-print("Эта программа запущена из репозитория GitHub.")
+import datetime
+import os
+
+# Получаем время
+current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+print("--- ОТЧЕТ РОБОТА ---")
+print(f"Привет, Andrii! Код запущен успешно.")
+print(f"Время запуска на сервере: {current_time}")
+print(f"Операционная система сервера: {os.name}")
+print("--------------------")
+
