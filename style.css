@@ -1,34 +1,25 @@
-/* Общие настройки для всей страницы */
 body {
-    background-color: #f4f7f6; /* Светло-серый приятный фон */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
     margin: 0;
+    overflow: hidden;
+    background: radial-gradient(circle, #1a1a2e, #16213e, #0f3460);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    user-select: none;
 }
 
-/* Стили для заголовка */
 h1 {
-    color: #2c3e50;
     font-size: 3rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+    pointer-events: none;
+    text-shadow: 0 0 20px rgba(255,255,255,0.5);
+    z-index: 10;
 }
 
-/* Эффект при наведении (или нажатии на планшете) */
-h1:hover {
-    transform: scale(1.1);
-    color: #e74c3c;
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
-
-/* Стили для текста */
-p {
-    color: #7f8c8d;
-    font-size: 1.2rem;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 5px;
-}
-
