@@ -1,7 +1,34 @@
+/* Общие настройки для всей страницы */
 body {
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
+    background-color: #f4f7f6; /* Светло-серый приятный фон */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
 }
+
+/* Стили для заголовка */
 h1 {
-    color: navy;
+    color: #2c3e50;
+    font-size: 3rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
 }
+
+/* Эффект при наведении (или нажатии на планшете) */
+h1:hover {
+    transform: scale(1.1);
+    color: #e74c3c;
+}
+
+/* Стили для текста */
+p {
+    color: #7f8c8d;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 5px;
+}
+
