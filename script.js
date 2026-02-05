@@ -15,31 +15,64 @@ class Particle {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = Math.random() * 5 + 1;
+        this.size = Math.random() * 15 + 5; // Сделаем их чуть крупнее
         this.speedX = Math.random() * 3 - 1.5;
-        this.speedY = Math.random() * 3 - 1.5;
-        this.color = `hsl(${Math.random() * 360}, 70%, 70%)`;
+        this.speedY = Math.random() * -3 - 1; // Сердечки будут лететь немного вверх
+        this.color = `hsl(${Math.random() * 360}, 80%, 70%)`;
+        this.opacity = 1;
     }
+
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
-        if (this.size > 0.1) this.size -= 0.1;
+        if (this.opacity > 0.02) this.opacity -= 0.02; // Плавное исчезновение
     }
+
     draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
         ctx.fillStyle = this.color;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        
+        // Математическое рисование сердечка
+        const topCurveHeight = this.size * 0.3;
+        ctx.moveTo(this.x, this.y + topCurveHeight);
+        
+        // Левая половинка
+        ctx.bezierCurveTo(
+            this.x, this.y, 
+            this.x - this.size / 2, this.y, 
+            this.x - this.size / 2, this.y + topCurveHeight
+        );
+        ctx.bezierCurveTo(
+            this.x - this.size / 2, this.y + (this.size + topCurveHeight) / 2, 
+            this.x, this.y + (this.size + topCurveHeight) / 2, 
+            this.x, this.y + this.size
+        );
+        
+        // Правая половинка
+        ctx.bezierCurveTo(
+            this.x, this.y + (this.size + topCurveHeight) / 2, 
+            this.x + this.size / 2, this.y + (this.size + topCurveHeight) / 2, 
+            this.x + this.size / 2, this.y + topCurveHeight
+        );
+        ctx.bezierCurveTo(
+            this.x + this.size / 2, this.y, 
+            this.x, this.y, 
+            this.x, this.y + topCurveHeight
+        );
+        
         ctx.fill();
+        ctx.restore();
     }
 }
 
 function handleParticles(e) {
-    // Проверка для мыши или тачскрина iPad
     const x = e.x || (e.touches && e.touches[0].clientX);
     const y = e.y || (e.touches && e.touches[0].clientY);
     
     if (x && y) {
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 3; i++) {
             particles.push(new Particle(x, y));
         }
     }
@@ -53,7 +86,7 @@ function animate() {
     for (let i = 0; i < particles.length; i++) {
         particles[i].update();
         particles[i].draw();
-        if (particles[i].size <= 0.3) {
+        if (this.opacity <= 0) {
             particles.splice(i, 1);
             i--;
         }
@@ -61,3 +94,4 @@ function animate() {
     requestAnimationFrame(animate);
 }
 animate();
+
