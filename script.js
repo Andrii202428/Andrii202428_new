@@ -1,4 +1,4 @@
-alert("JS подключен!");
+alert("JS подключенннннн!");
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -15,78 +15,66 @@ class Particle {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = Math.random() * 15 + 5; // Сделаем их чуть крупнее
-        this.speedX = Math.random() * 3 - 1.5;
-        this.speedY = Math.random() * -3 - 1; // Сердечки будут лететь немного вверх
-        this.color = `hsl(${Math.random() * 360}, 80%, 70%)`;
+        // Увеличили размер: теперь от 20 до 40 пикселей
+        this.size = Math.random() * 20 + 20; 
+        this.speedX = Math.random() * 4 - 2;
+        this.speedY = Math.random() * -2 - 2; // Летят вверх
+        this.color = `hsl(${Math.random() * 30 + 340}, 100%, 65%)`; // Оттенки розового и красного
         this.opacity = 1;
     }
 
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
-        if (this.opacity > 0.02) this.opacity -= 0.02; // Плавное исчезновение
+        this.opacity -= 0.015; // Тают медленнее
     }
 
     draw() {
+        if (this.opacity <= 0) return;
+
         ctx.save();
+        ctx.translate(this.x, this.y);
         ctx.globalAlpha = this.opacity;
         ctx.fillStyle = this.color;
+        
+        // Рисуем большое сердце
         ctx.beginPath();
-        
-        // Математическое рисование сердечка
-        const topCurveHeight = this.size * 0.3;
-        ctx.moveTo(this.x, this.y + topCurveHeight);
-        
-        // Левая половинка
-        ctx.bezierCurveTo(
-            this.x, this.y, 
-            this.x - this.size / 2, this.y, 
-            this.x - this.size / 2, this.y + topCurveHeight
-        );
-        ctx.bezierCurveTo(
-            this.x - this.size / 2, this.y + (this.size + topCurveHeight) / 2, 
-            this.x, this.y + (this.size + topCurveHeight) / 2, 
-            this.x, this.y + this.size
-        );
-        
-        // Правая половинка
-        ctx.bezierCurveTo(
-            this.x, this.y + (this.size + topCurveHeight) / 2, 
-            this.x + this.size / 2, this.y + (this.size + topCurveHeight) / 2, 
-            this.x + this.size / 2, this.y + topCurveHeight
-        );
-        ctx.bezierCurveTo(
-            this.x + this.size / 2, this.y, 
-            this.x, this.y, 
-            this.x, this.y + topCurveHeight
-        );
-        
+        const d = this.size;
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-d / 2, -d / 2, -d, d / 3, 0, d);
+        ctx.bezierCurveTo(d, d / 3, d / 2, -d / 2, 0, 0);
         ctx.fill();
+        
         ctx.restore();
     }
 }
 
 function handleParticles(e) {
-    const x = e.x || (e.touches && e.touches[0].clientX);
-    const y = e.y || (e.touches && e.touches[0].clientY);
+    // Получаем координаты корректно для тача и мыши
+    const x = e.clientX || (e.touches && e.touches[0].clientX);
+    const y = e.clientY || (e.touches && e.touches[0].clientY);
     
     if (x && y) {
-        for (let i = 0; i < 3; i++) {
+        // Создаем сразу несколько сердечек за один раз
+        for (let i = 0; i < 2; i++) {
             particles.push(new Particle(x, y));
         }
     }
 }
 
+// Слушаем события
 window.addEventListener('mousemove', handleParticles);
-window.addEventListener('touchstart', handleParticles);
+window.addEventListener('touchstart', (e) => {
+    handleParticles(e);
+    // e.preventDefault(); // Можно раскомментировать, если страница дергается при касании
+});
 
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < particles.length; i++) {
         particles[i].update();
         particles[i].draw();
-        if (this.opacity <= 0) {
+        if (particles[i].opacity <= 0) {
             particles.splice(i, 1);
             i--;
         }
